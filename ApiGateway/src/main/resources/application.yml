@@ -1,0 +1,32 @@
+spring:
+  cloud:
+    gateway:
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: "http://localhost:3000"
+            allowedHeaders: "*"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+      routes:
+        - id: StudentService
+          uri: lb://StudentService
+          predicates:
+            - Path=/api/v1/**
+          filters:
+            - name: AuthenticationFilter
+
+        - id: ParentService
+          uri: lb://ParentService
+          predicates:
+            - Path=/api/v2/**
+          filters:
+            - name: AuthenticationFilter
+
+        - id: auth
+          uri: lb://auth
+          predicates:
+            - Path=/**
